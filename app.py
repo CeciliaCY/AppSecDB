@@ -40,8 +40,8 @@ class User(db.Model):
     password = db.Column(db.String(86), nullable=False)
     twofa = db.Column(db.String(11), nullable=False)
     role = db.Column(db.String(6),nullable = True)
-    #histories = db.relationship('History', backref = 'user', cascade = 'all, delete-orphan', lazy = 'dynamic')
-    #queries = db.relationship('Query', backref = 'user', cascade = 'all, delete-orphan', lazy = 'dynamic')
+    #histories = db.relationship('History', backref = 'user', lazy = True)
+    #queries = db.relationship('Query', backref = 'user', lazy = True)
 
 
     def __repr__(self):
@@ -140,6 +140,7 @@ def login():
     
                         log = History(username=username,loginTime = timestamp)
                         db.session.add(log)
+                        
                         db.session.commit()
                         result = "success"                    
                     else:
