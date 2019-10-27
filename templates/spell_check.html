@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Text to check
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="logout">Logout</a>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <form method="post" autocomplete="off">
+
+                <h1 class="h3 mb-3 font-weight-normal">Text to Check</h1>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <textarea name="inputtext" id="inputtext" class="form-control" required autofocus></textarea>
+                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
+
+                <h1 class="h3 mb-3 font-weight-normal">Textout</h1>
+                <p id="textout">{{ textout }}</p>
+                
+                <h1 class="h3 mb-3 font-weight-normal">Misspelled Words</h1>
+                <p id="misspelled">{{ misword }}</p>
+
+
+            </form>
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+</div>
+
+{% endblock %}

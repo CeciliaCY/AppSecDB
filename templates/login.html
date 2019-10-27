@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<form class="form-signin" method="post" autocomplete="off">
+
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="uname" class="sr-only">Username</label>
+    <input name="uname" id="uname" class="form-control" placeholder="Username" pattern ="^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$" required autofocus>
+    <label for="pword" class="sr-only">Password</label>
+    <input type="password" name="pword" id="pword" class="form-control" placeholder="Password" pattern ="^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$" required>
+    <label for="2fa" class="sr-only">2FA</label>
+    <input name="2fa" id="2fa" class="form-control" placeholder="Phone Number for 2FA" pattern ="^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$">
+
+    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Log In">
+    <p id="result">{{result}}</p>
+    <div class="content"><br>
+        <p>No account? <a href="register">Register Here</a></p>
+    </div>
+    <a href="spell_check">Spell Check</a>
+</form>
+
+
+{% endblock %}

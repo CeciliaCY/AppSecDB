@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+
+<form class="form-signin" method="post" autocomplete="off">
+  <h1 class="h3 mb-3 font-weight-normal">Please Register</h1>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label for="uname" class="sr-only">Username</label>
+  <input name="uname" id="uname" class="form-control" placeholder="Username" pattern = "^([A-Za-z0-9]){3,20}$" required autofocus>
+  <label for="pword" class="sr-only">Password</label>
+  <input type="password" name="pword" id="pword" pattern = "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" class="form-control" placeholder="Password" required>
+  
+  Please enter your phone number if you want to enable 2FA<br>
+  <label for="2fa" class="sr-only">2FA</label>
+  <input name="2fa" id="2fa" class="form-control" pattern="^\d{11}" placeholder="Phone Number for 2FA. Pattern: 00000000000">
+  <input class="btn btn-lg btn-primary btn-block" type="submit" value="Register">
+
+  <p id="success">{{result}}</p>
+
+  <div><a href="spell_check">Login</a></div>
+<div class="text"><p><strong>Your username must meet the following requirement:</strong></p>
+  <ul><li>3 to 20 characters long</li><li>Letters and numbers only</li></ul>
+  <br>
+  <br>
+  <p><strong>Your password must meet the following requirement: </strong><p>
+  <ul><li>Must be at least 8 characters long</li>
+  <li>Must contain uppercase, lowercase, and at least one number</li>
+<li>Must contain one of special characters(<b>!@#$%^&</b>) </li></ul>
+  </div>
+</form>
+
+
+{% endblock %}
+
+<script>
+var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+</script>
