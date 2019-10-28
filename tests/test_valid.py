@@ -114,7 +114,7 @@ assert(message =="Username, password or 2FA format doesn't meet the requirement.
 
 #Username, password and 2FA format meet requirement
 data ={
-    'uname': 'test',
+    'uname': 'test1',
     'pword': 'Test@1234',
     '2fa':'00000000000' 
 }
@@ -125,7 +125,7 @@ assert(message =="success")
 
 #Existed user, return failure
 data ={
-    'uname': 'test',
+    'uname': 'test1',
     'pword': 'Test@1234',
     '2fa':'00000000000' 
 }
@@ -135,10 +135,6 @@ message = soup.find(id="success").text
 assert(message =="failure")
 
 #Reset user.txt
-#Get current work directory
-cpath = os.getcwd()
-userfile = open(cpath+"/static/user.txt","w")
-userfile.write("{'jack': {'password': '$5$rounds=535000$oMxzsN/NwMWRZR6U$lKuNsziNcpEz4r.ZU8uBr97KwBkykh9zXvEGG3p.fa.', '2fa': '00000000000'}}")
-userfile.close()
+
 
 print("All tests using bs4 are completed")

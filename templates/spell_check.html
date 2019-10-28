@@ -6,7 +6,8 @@ Text to check
 
 {% block content %}
 <div class="container">
-    <a href="logout">Logout</a>
+    <a href="{{url_for('logout')}}">Logout</a> | <a href="{{url_for('history')}}">Query History</a> {% if admin %}| <a href="{{url_for('login_history')}}">Login and Logout History</a> {% endif %}
+    <hr>
     <div class="row">
         <div class="col-1"></div>
         <div class="col-10">
@@ -28,7 +29,7 @@ Text to check
         </div>
         <div class="col-1"></div>
     </div>
-
 </div>
+
 
 {% endblock %}

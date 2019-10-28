@@ -14,7 +14,7 @@ from datetime import datetime
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(base_dir, "instance/spellcheck.db"))
-print (database_file)
+
 
 app = Flask(__name__)
 #Set secret key for session management
@@ -31,7 +31,7 @@ db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
 # Disable CSRF for testing
-#app.config['WTF_CSRF_METHODS'] = [] 
+app.config['WTF_CSRF_METHODS'] = [] 
 
 #Define user model
 class User(db.Model):
@@ -40,14 +40,14 @@ class User(db.Model):
     password = db.Column(db.String(86), nullable=False)
     twofa = db.Column(db.String(11), nullable=False)
     role = db.Column(db.String(6),nullable = True)
-    #histories = db.relationship('History', backref = 'user', lazy = True)
-    #queries = db.relationship('Query', backref = 'user', lazy = True)
+    #histories = db.relationship('LogHistory', backref = 'user', lazy = True)
+    #queries = db.relationship('QueryHistory', backref = 'user', lazy = True)
 
 
     def __repr__(self):
-        return "<User %r %r %r>" % (self.username, self.password, self.twofa)
+        return "<User %r %r %r %r>" % (self.username, self.password, self.twofa, self.role)
 
-class History(db.Model):
+class LogHistory(db.Model):
     __tablename__ = 'histories'
     logid = db.Column(db.Integer, nullable=False, autoincrement = True, primary_key=True)  
     loginTime = db.Column(db.DateTime, nullable=False)
@@ -56,9 +56,9 @@ class History(db.Model):
     #username = db.Column(db.String(20), nullable=False, db.ForeignKey('user.username'))
 
     def __repr__(self):
-        return "<History %r %r %r %r>" % (self.logid, self.loginTime, self.logoutTime, self.username)
+        return "<LogHistory %r %r %r %r>" % (self.logid, self.loginTime, self.logoutTime, self.username)
 
-class Query(db.Model):
+class QueryHistory(db.Model):
     __tablename__ = 'queries'
     queryid = db.Column(db.Integer, nullable=False, autoincrement = True, primary_key=True)
     querytext = db.Column(db.String(4000), nullable=False)
@@ -67,7 +67,7 @@ class Query(db.Model):
     #username = db.Column(db.String(20), nullable=False, db.ForeignKey('user.username'))
 
     def __repr__(self):
-        return "<Query %r %r %r %r>" % (self.queryid, self.querytext, self.queryresult, self.username)
+        return "<QueryHistory %r %r %r %r>" % (self.queryid, self.querytext, self.queryresult, self.username)
 
 
 #Index page redirects to login page
@@ -114,6 +114,7 @@ def register():
 
 @app.route('/login', methods =['POST','GET'])
 def login():
+    admin = False
     if request.method =='POST':
         result=""
         #Using lower() to avoid case sensetive for user name
@@ -134,11 +135,13 @@ def login():
                         #Get UTC datetime
                         timestamp = datetime.utcnow()
                         #Set session if login success
-                        session['logged_in'] = username
+                        session['logged_in'] = True
+                        #Set session username for later query
+                        session['user'] = username
                         #Set session loginTime for later query
                         session['loginTime'] =timestamp.isoformat()
-    
-                        log = History(username=username,loginTime = timestamp)
+                        session['role']=user.role    
+                        log = LogHistory(username=username,loginTime = timestamp)
                         db.session.add(log)
                         
                         db.session.commit()
@@ -160,13 +163,12 @@ def login():
 
 @app.route('/spell_check', methods =['POST','GET'])
 def spell_check():
-    #Convert session loginTime to datetime format for comparison
-    currentLoginTime = datetime.strptime(session['loginTime'], '%Y-%m-%dT%H:%M:%S.%f')
-
-    currentlog= History.query.filter_by(loginTime = currentLoginTime).first()
-
-    if(session.get('logged_in')== currentlog.username):   
-        #Get current work directory
+    if session.get('logged_in') == True:
+        if (session['role']) == 'admin':
+            admin = True
+        else:
+            admin = False
+            #Get current work directory
         cpath = os.getcwd()
         
         if request.method =='POST':
@@ -176,15 +178,16 @@ def spell_check():
             textfile.close()           
             tmp=subprocess.check_output([cpath+'/static/a.out',cpath+'/static/text.txt', cpath+'/static/wordlist.txt']).decode("utf-8")
             misword = tmp.replace("\n",", ")[:-2]
-            querylog = Query(querytext=textout,queryresult = misword, username = currentlog.username)
+            querylog = QueryHistory(querytext=textout,queryresult = misword, username = session['user'])
             db.session.add(querylog)
             db.session.commit()
-            return render_template ('spell_check.html', misword = misword, textout=textout)
+            return render_template ('spell_check.html', misword = misword, textout=textout, admin=admin)
         if request.method =='GET':
-            return render_template ('spell_check.html')
+            return render_template ('spell_check.html', admin=admin)
     else:
         return redirect(url_for('login'))
-     
+
+    #Convert session loginTime to datetime format for comparison   
 
     
 @app.route('/logout')
@@ -192,13 +195,53 @@ def logout():
     timestamp = datetime.utcnow()
     #Convert session loginTime to datetime format for comparison
     currentLoginTime = datetime.strptime(session['loginTime'], '%Y-%m-%dT%H:%M:%S.%f')
-    currentlog= History.query.filter_by(loginTime = currentLoginTime).first()
+    currentlog= LogHistory.query.filter_by(loginTime = currentLoginTime, username = session['user']).first()
     currentlog.logoutTime = timestamp
     db.session.add(currentlog)
     db.session.commit()
 
     session.clear()
     return redirect(url_for('login'))
+
+
+@app.route('/history')
+def history():
+    if session.get('logged_in') == True:
+        if session['role'] == 'admin':
+            queries = QueryHistory.query.order_by(QueryHistory.queryid)
+            admin = True
+        else:
+            queries = QueryHistory.query.filter_by(username = session['user']).order_by(QueryHistory.queryid)
+            admin = False
+        
+        num = queries.count()
+        
+        return render_template('queryhistory.html', queries = queries, numqueries=num, admin=admin)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/history/query<id>')
+def query(id):
+    if session.get('logged_in') == True:
+        if session['role'] == 'admin':
+            query = QueryHistory.query.filter_by(queryid = id).first() 
+            admin = True
+        else:
+            query = QueryHistory.query.filter_by(queryid = id, username=session['user']).first()
+            admin = False     
+        return render_template('queryview.html', query = query, admin=admin)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/login_history')
+def login_history():
+    if session.get('logged_in') == True and session['role'] == 'admin':
+        queries = LogHistory.query.order_by(LogHistory.logid).all()
+        admin = True
+        return render_template('login_history.html', queries = queries, admin=admin)
+    else:
+        return redirect(url_for('spell_check'))
+
 
 if __name__ == "__main__":
     

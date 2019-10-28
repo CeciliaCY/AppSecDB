@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Text to check
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{{url_for('logout')}}">Logout</a> | <a href="{{url_for('history')}}">Query History</a> {% if admin %}| <a href="{{url_for('login_history')}}">Login and Logout History</a> {% endif %}
+    <hr>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <form method="post" autocomplete="off">
+
+                <h1 class="h3 mb-3 font-weight-normal">Login Logout History</h1>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID </th>
+                        <th>Username</th>
+                        <th>Login</th>                        
+                        <th>Logout</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                {% for query in queries %}
+                    <tr>
+                    <td id={{query.logid}}>{{ query.logid }}</td>
+                    <td>{{ query.username }}</td>
+                    <td>{{ query.loginTime }}</td>
+                    <td>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</td>
+                    
+                    </tr>
+                {% endfor %}
+                </tbody>
+               </table>
+               
+
+
+                
+
+
+            </form>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+
+{% endblock %}
