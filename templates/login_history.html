@@ -12,6 +12,12 @@ Text to check
         <div class="col-1"></div>
         <div class="col-10">
             <form method="post" autocomplete="off">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    {% if admin %}
+                    <input name="userid" id="userid"  class="form-control" placeholder="Search a User" pattern ="^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$" required autofocus>
+                    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Search">
+                    {% endif %}
+
 
                 <h1 class="h3 mb-3 font-weight-normal">Login Logout History</h1>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -28,21 +34,15 @@ Text to check
                 <tbody>
                 {% for query in queries %}
                     <tr>
-                    <td id={{query.logid}}>{{ query.logid }}</td>
+                    <td id=login{{query.logid}}>{{ query.logid }}</td>
                     <td>{{ query.username }}</td>
-                    <td>{{ query.loginTime }}</td>
-                    <td>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</td>
+                    <td id=login{{query.logid}}_time>{{ query.loginTime }}</td>
+                    <td id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</td>
                     
                     </tr>
                 {% endfor %}
                 </tbody>
                </table>
-               
-
-
-                
-
-
             </form>
         </div>
         <div class="col-1"></div>

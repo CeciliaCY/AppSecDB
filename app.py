@@ -204,12 +204,16 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/history')
+@app.route('/history', methods =['POST','GET'])
 def history():
     if session.get('logged_in') == True:
         if session['role'] == 'admin':
-            queries = QueryHistory.query.order_by(QueryHistory.queryid)
             admin = True
+            if request.method =='GET':
+                queries = QueryHistory.query.order_by(QueryHistory.queryid)
+            if request.method =='POST':
+                search_user = request.form['userquery'].lower()
+                queries = QueryHistory.query.filter_by(username = search_user).order_by(QueryHistory.queryid)
         else:
             queries = QueryHistory.query.filter_by(username = session['user']).order_by(QueryHistory.queryid)
             admin = False
@@ -233,11 +237,15 @@ def query(id):
     else:
         return redirect(url_for('login'))
 
-@app.route('/login_history')
+@app.route('/login_history', methods =['POST','GET'])
 def login_history():
     if session.get('logged_in') == True and session['role'] == 'admin':
-        queries = LogHistory.query.order_by(LogHistory.logid).all()
         admin = True
+        if request.method =='GET':
+            queries = LogHistory.query.order_by(LogHistory.logid)
+        if request.method =='POST':
+            search_user = request.form['userid'].lower()
+            queries = LogHistory.query.filter_by(username =search_user).order_by(LogHistory.logid)       
         return render_template('login_history.html', queries = queries, admin=admin)
     else:
         return redirect(url_for('spell_check'))
