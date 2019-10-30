@@ -89,21 +89,21 @@ def register():
         user = User.query.filter_by(username=username).first()
 
         #Validate the inputs
-        #if (re.match (r"^([A-Za-z0-9]){3,20}$",username) and re.match(r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$",pwordInput) and (True if (fa =="") else re.match(r"^\d{11}",fa))):
+        if (re.match (r"^([A-Za-z0-9]){3,20}$",username) and re.match(r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$",pwordInput) and (True if (fa =="") else re.match(r"^\d{11}",fa))):
             #If user existed, then return failure
-        if (user is not None):
-            result = "failure"
-        else: 
-            #Hash password by sha256
-            password = sha256_crypt.using(rounds=324333).hash(pwordInput)
-            
-            #Save password into a dictionary and then save in a file
-            user = User(username=username,password=password,twofa = fa)
-            db.session.add(user)
-            db.session.commit()
-            result = "success"
-        #else:
-            #result = "Username, password or 2FA format doesn't meet the requirement."
+            if (user is not None):
+                result = "failure"
+            else: 
+                #Hash password by sha256
+                password = sha256_crypt.using(rounds=324333).hash(pwordInput)
+                
+                #Save password into a dictionary and then save in a file
+                user = User(username=username,password=password,twofa = fa)
+                db.session.add(user)
+                db.session.commit()
+                result = "success"
+        else:
+            result = "Username, password or 2FA format doesn't meet the requirement."
 
         return render_template ('register.html', result = result)
 
@@ -126,34 +126,34 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         #Validate the inputs
-        #if (re.match (r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",username) and re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",password) and (True if (fa =="") else re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",fa))):      
-        if (user is not None):
-            #Verify the password            
-            if sha256_crypt.verify(password, user.password):
-                if (user.twofa==fa ):                    
-                    
-                    #Get UTC datetime
-                    timestamp = datetime.utcnow()
-                    #Set session if login success
-                    session['logged_in'] = True
-                    #Set session username for later query
-                    session['user'] = username
-                    #Set session loginTime for later query
-                    session['loginTime'] =timestamp.isoformat()
-                    session['role']=user.role    
-                    log = LogHistory(username=username,loginTime = timestamp)
-                    db.session.add(log)
-                    
-                    db.session.commit()
-                    result = "success"                    
+        if (re.match (r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",username) and re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",password) and (True if (fa =="") else re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",fa))):      
+            if (user is not None):
+                #Verify the password            
+                if sha256_crypt.verify(password, user.password):
+                    if (user.twofa==fa ):                    
+                        
+                        #Get UTC datetime
+                        timestamp = datetime.utcnow()
+                        #Set session if login success
+                        session['logged_in'] = True
+                        #Set session username for later query
+                        session['user'] = username
+                        #Set session loginTime for later query
+                        session['loginTime'] =timestamp.isoformat()
+                        session['role']=user.role    
+                        log = LogHistory(username=username,loginTime = timestamp)
+                        db.session.add(log)
+                        
+                        db.session.commit()
+                        result = "success"                    
+                    else:
+                        result = "Two-factor failure"
                 else:
-                    result = "Two-factor failure"
+                    result = "Incorrect"
             else:
                 result = "Incorrect"
         else:
-            result = "Incorrect"
-        #else:
-            #result = "Username, password or 2FA format doesn't meet the requirement."
+            result = "Username, password or 2FA format doesn't meet the requirement."
 
         return render_template('login.html', result=result)
 
