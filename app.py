@@ -31,7 +31,7 @@ db = SQLAlchemy(app)
 csrf = CSRFProtect(app)
 
 # Disable CSRF for testing
-app.config['WTF_CSRF_METHODS'] = [] 
+#app.config['WTF_CSRF_METHODS'] = [] 
 
 #Define user model
 class User(db.Model):
