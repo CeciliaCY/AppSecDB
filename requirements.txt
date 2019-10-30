@@ -1,5 +1,7 @@
 Flask
 passlib==1.7.1
 Flask-WTF
+Flask-SQLAlchemy
+datetime
 
 
