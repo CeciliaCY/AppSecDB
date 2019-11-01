@@ -6,6 +6,9 @@ DateTime==4.3
 SQLAlchemy
 db==0.1.1
 db-sqlit3
+subprocess
+os
+
 
 
 
