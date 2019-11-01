@@ -69,6 +69,12 @@ class QueryHistory(db.Model):
     def __repr__(self):
         return "<QueryHistory %r %r %r %r>" % (self.queryid, self.querytext, self.queryresult, self.username)
 
+db.create_all()
+
+if (User.query.filter_by(username="admin").count()==0 ):
+    admin_account = User (username="admin", password= sha256_crypt.using(rounds=324333).hash("Administrator@1"), twofa="12345678901", role="admin")
+    db.session.add(admin_account)
+    db.session.commit()
 
 #Index page redirects to login page
 @app.route('/')
