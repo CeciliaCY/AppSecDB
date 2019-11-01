@@ -8,6 +8,7 @@ import pytest
 app.config['WTF_CSRF_METHODS'] = [] 
 app.config['WTF_CSRF_ENABLED'] = False
 
+
 @pytest.fixture
 def client():
     #A test client for the app.

@@ -6,11 +6,12 @@ python:
 before_install:
   - sudo apt-get update
   - sudo apt-get install python-passlib
+  - sudo apt-get install sqlite3
 
 install:
   - pip3 install -r requirements.txt
   - pip3 install tox-travis
   - pip3 install passlib
-
+  - pip3 install sqlalchemy
 
 script: flask run & tox
