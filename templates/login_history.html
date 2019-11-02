@@ -20,17 +20,16 @@ Text to check
 
 
                 <h1 class="h3 mb-3 font-weight-normal">Login Logout History</h1>
-               <ul> 
+               <ul>
                 {% for query in queries %}
-                  <li> 
-                    <p id=login{{query.logid}}>{{ query.logid }}</p>
-                    <p>{{ query.username }}</p>
+                    
+                    <li id=login{{query.logid}}>
                     <p id=login{{query.logid}}_time>{{ query.loginTime }}</p>
                     <p id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</p>
-                    
-                   </li>
+                    </li>
+                     
                 {% endfor %}
-            </ul>
+              </ul>
                {% endif %}
             </form>
         </div>
