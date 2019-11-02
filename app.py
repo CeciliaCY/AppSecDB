@@ -95,8 +95,8 @@ def register():
         user = User.query.filter_by(username=username).first()
 
         #Validate the inputs
-        if (re.match (r"^([A-Za-z0-9_]){3,20}$",username) and re.match(r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$",pwordInput) and (True if (fa =="") else re.match(r"^\d{11}",fa))):
-            #If user existed, then return failure
+        if (re.match (r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",username) and re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",password) and (True if (fa =="") else re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",fa))):      
+           #If user existed, then return failure
             if (user is not None):
                 result = "failure"
             else: 
