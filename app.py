@@ -13,7 +13,7 @@ from datetime import datetime
 
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-database_file = "sqlite:///{}".format(os.path.join(base_dir, "instance/spellcheck.db"))
+database_file = "sqlite:///{}".format(os.path.join(base_dir, "spellcheck.db"))
 
 
 app = Flask(__name__)
