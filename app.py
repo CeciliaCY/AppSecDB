@@ -15,7 +15,7 @@ cpath = os.getcwd()
 # print (cpath)
 # base_dir = os.path.dirname(os.path.abspath(__file__))
 # print(base_dir)
-database_file = "sqlite:///{}".format(os.path.join(cpath, "instance/spellcheck.db"))
+database_file = "sqlite:///{}".format(os.path.join(cpath, "spellcheck.db"))
 
 
 app = Flask(__name__)
