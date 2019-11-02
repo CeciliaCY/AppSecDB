@@ -213,7 +213,7 @@ def history():
         if session['role'] == 'admin':
             admin = True
             if request.method =='GET':
-                queries = QueryHistory.query.order_by(QueryHistory.queryid)
+                queries = QueryHistory.query.filter_by(username="").order_by(QueryHistory.queryid)
             if request.method =='POST':
                 search_user = request.form['userquery'].lower()
                 queries = QueryHistory.query.filter_by(username = search_user).order_by(QueryHistory.queryid)
@@ -245,7 +245,7 @@ def login_history():
     if session.get('logged_in') == True and session['role'] == 'admin':
         admin = True
         if request.method =='GET':
-            queries = LogHistory.query.order_by(LogHistory.logid)
+            queries = LogHistory.query.filter_by(username ="").order_by(LogHistory.logid)
         if request.method =='POST':
             search_user = request.form['userid'].lower()
             queries = LogHistory.query.filter_by(username =search_user).order_by(LogHistory.logid)       
