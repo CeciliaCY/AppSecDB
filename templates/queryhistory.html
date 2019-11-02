@@ -11,7 +11,7 @@ Text to check
     <div class="row">
         <div class="col-1"></div>
         <div class="col-10">
-            <form method="post" autocomplete="off">
+            <form method="post" autocomplete="off" id="userquery" >
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 {% if admin %}
                 <input name="userquery" id="userquery" class="form-control" placeholder="Search a User" pattern ="^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$" required autofocus>
