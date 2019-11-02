@@ -11,9 +11,11 @@ import re
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-database_file = "sqlite:///{}".format(os.path.join(base_dir, "instance/spellcheck.db"))
+cpath = os.getcwd()
+# print (cpath)
+# base_dir = os.path.dirname(os.path.abspath(__file__))
+# print(base_dir)
+database_file = "sqlite:///{}".format(os.path.join(cpath, "instance/spellcheck.db"))
 
 
 app = Flask(__name__)
