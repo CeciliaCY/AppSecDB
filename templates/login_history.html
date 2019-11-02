@@ -16,33 +16,22 @@ Text to check
                     {% if admin %}
                     <input name="userid" id="userid"  class="form-control" placeholder="Search a User" pattern ="^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$" required autofocus>
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Search">
-                    {% endif %}
+                   
 
 
                 <h1 class="h3 mb-3 font-weight-normal">Login Logout History</h1>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID </th>
-                        <th>Username</th>
-                        <th>Login</th>                        
-                        <th>Logout</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
+               <ul> 
                 {% for query in queries %}
-                    <tr>
-                    <td id=login{{query.logid}}>{{ query.logid }}</td>
-                    <td>{{ query.username }}</td>
-                    <td id=login{{query.logid}}_time>{{ query.loginTime }}</td>
-                    <td id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</td>
+                  <li> 
+                    <p id=login{{query.logid}}>{{ query.logid }}</p>
+                    <p>{{ query.username }}</p>
+                    <p id=login{{query.logid}}_time>{{ query.loginTime }}</p>
+                    <p id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</p>
                     
-                    </tr>
+                   </li>
                 {% endfor %}
-                </tbody>
-               </table>
+            </ul>
+               {% endif %}
             </form>
         </div>
         <div class="col-1"></div>

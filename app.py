@@ -254,7 +254,7 @@ def login_history():
             queries = LogHistory.query.filter_by(username =search_user).order_by(LogHistory.logid)       
         return render_template('login_history.html', queries = queries, admin=admin)
     else:
-        return redirect(url_for('spell_check'))
+        return render_template('login_history.html', admin=False)
 
 
 if __name__ == "__main__":
