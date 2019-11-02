@@ -16,7 +16,7 @@ Register
   
   Please enter your phone number if you want to enable 2FA<br>
   <label for="2fa" class="sr-only">2FA</label>
-  <input name="2fa" id="2fa" class="form-control" pattern="^\d{11}" placeholder="Phone Number for 2FA. Pattern: 00000000000">
+  <input name="2fa" id="2fa" class="form-control" pattern="^\d{10,11}" placeholder="Phone Number for 2FA. Pattern: 00000000000">
   <input class="btn btn-lg btn-primary btn-block" type="submit" value="Register">
 
   <p id="success">{{result}}</p>
