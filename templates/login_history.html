@@ -24,7 +24,8 @@ Text to check
                 {% for query in queries %}
                     
                     <li id=login{{query.logid}}>
-                    <p id=login{{query.logid}}_time>{{ query.loginTime }}</p>
+                     {{query.logid}}
+                     <p id=login{{query.logid}}_time>{{ query.loginTime }}</p>
                     <p id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</p>
                     </li>
                      
