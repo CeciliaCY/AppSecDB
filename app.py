@@ -247,7 +247,7 @@ def login_history():
         if request.method =='GET':
             queries = LogHistory.query.order_by(LogHistory.logid)
         if request.method =='POST':
-            search_user = request.form['userid'].lower()
+            search_user = request.form['userquery'].lower()
             queries = LogHistory.query.filter_by(username =search_user).order_by(LogHistory.logid)       
         return render_template('login_history.html', queries = queries, admin=admin)
     else:
