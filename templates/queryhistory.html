@@ -33,7 +33,7 @@ Text to check
                 <tbody>
                 {% for query in queries %}
                     <tr>
-                    <td id=query{{query.queryid}}><a href="{{url_for('query', id=query.queryid)}}">{{ query.queryid }}</a></td>
+                    <td><a  id=query{{query.queryid}} href="{{url_for('query', id=query.queryid)}}">{{ query.queryid }}</a></td>
                     <td>{{ query.username }}</td>
                     <td>{{ query.querytext }}</td>
                     <td>{{ query.queryresult }}</td>

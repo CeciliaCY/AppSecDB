@@ -34,10 +34,10 @@ Text to check
                 <tbody>
                 {% for query in queries %}
                     <tr>
-                    <td id=login{{query.logid}}>{{ query.logid }}</td>
+                    <td><p id=login{{query.logid}}>{{ query.logid }}</p></td>
                     <td>{{ query.username }}</td>
-                    <td id=login{{query.logid}}_time>{{ query.loginTime }}</td>
-                    <td id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</td>
+                    <td><p id=login{{query.logid}}_time>{{ query.loginTime }}</p></td>
+                    <td><p id=logout{{query.logid}}_time>{{ query.logoutTime if (query.logoutTime) else 'N/A'}}</p></td>
                     
                     </tr>
                 {% endfor %}
