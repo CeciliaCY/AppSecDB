@@ -20,31 +20,16 @@ Text to check
                 <h1 class="h3 mb-3 font-weight-normal">Query History</h1>
                 
                 <b>Total Number of Queries:</b><p id="numqueries">{{numqueries}}</p>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID </th>
-                        <th>Queried By</th>
-                        <th>Query Text</th>                        
-                        <th>Query Result</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
+                
                 {% for query in queries %}
-                    <tr>
-                    <td><a  id=query{{query.queryid}} href="{{url_for('query', id=query.queryid)}}">{{ query.queryid }}</a></td>
-                    <td>{{ query.username }}</td>
-                    <td>{{ query.querytext }}</td>
-                    <td>{{ query.queryresult }}</td>
+                    <a id=query{{query.queryid}} href="{{url_for('query', id=query.queryid)}}">{{ query.queryid }}</a>
+                    <p>{{ query.username }}</p>
+                    <p>{{ query.querytext }}</p>
+                    <p>{{ query.queryresult }}</p>
                     
                     </tr>
                 {% endfor %}
-                </tbody>
-               </table>
-               
-
-
+                
                 
 
 
