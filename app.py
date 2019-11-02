@@ -95,21 +95,18 @@ def register():
         user = User.query.filter_by(username=username).first()
 
         #Validate the inputs
-        if (re.match (r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",username) and re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",password) and (True if (fa =="") else re.match(r"^((?!(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)).)*$",fa))):      
-           #If user existed, then return failure
-            if (user is not None):
-                result = "failure"
-            else: 
-                #Hash password by sha256
-                password = sha256_crypt.using(rounds=324333).hash(pwordInput)
-                
-                #Save password into a dictionary and then save in a file
-                user = User(username=username,password=password,twofa = fa)
-                db.session.add(user)
-                db.session.commit()
-                result = "success"
-        else:
-            result = "Username, password or 2FA format doesn't meet the requirement."
+        if (user is not None):
+            result = "failure"
+        else: 
+            #Hash password by sha256
+            password = sha256_crypt.using(rounds=324333).hash(pwordInput)
+            
+            #Save password into a dictionary and then save in a file
+            user = User(username=username,password=password,twofa = fa)
+            db.session.add(user)
+            db.session.commit()
+            result = "success"
+
 
         return render_template ('register.html', result = result)
 
